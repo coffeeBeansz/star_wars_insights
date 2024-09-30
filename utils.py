@@ -1,37 +1,19 @@
+from sqlalchemy import create_engine
 import os
-import psycopg2
-import json
 
-def get_queries(queries_file):
-    with open(queries_file, 'r') as file:
-        queires = file.read()
-
-    queries = queires.split(';')
-    queries = [query.strip() for query in queries if query.strip() != '']
-    return queries
-
-def create_db_connection(db_name):
+def create_database_engine():
     host = os.getenv('DB_HOST')
     port = os.getenv('DB_PORT')
-    user = os.getenv('DB_USER')
+    username = os.getenv('DB_USER')
     password = os.getenv('DB_PASSWORD')
+    database = os.getenv('DB_NAME')
+
+    connection_string = f'postgresql+psycopg2://{username}:{password}@{host}:{port}/{database}'
     
-    connection = psycopg2.connect(
-        host = host,
-        port = port,
-        user = user,
-        password = password,
-        dbname = db_name
-    )
-    return connection
-
-def insert_data_into_table(cursor, query, data, table_format):
-    for item in data:
-        values = prepare_item_for_inserting_into_table(item, table_format)
-        cursor.execute(query, values)
-
-def prepare_item_for_inserting_into_table(item, table_format):
-    values = ()
-    for key in table_format:
-        values += (item[key],)
-    return values
+    try: 
+        engine = create_engine(connection_string)
+        return engine
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
+    
