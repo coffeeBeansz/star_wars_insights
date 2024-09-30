@@ -1,14 +1,15 @@
 import pandas as pd
 import psycopg2
 from psycopg2 import sql
+import requests
+from utils import create_db_connection
+from dotenv import load_dotenv
+import os
 
 # Import people form the database
 # Database connection parameters
-host = "localhost"
-port = "5432"
-user = "user"
-password = "password"
-db_name = "star_wars_db"
+load_dotenv()
+db_name = os.getenv('DB_NAME')
 
 def get_data(query):
 
@@ -16,15 +17,9 @@ def get_data(query):
 
     try:
         # Connect to the PostgreSQL database
-        connection = psycopg2.connect(
-            host=host,
-            port=port,
-            user=user,
-            password=password,
-            dbname=db_name
-        )
-
+        connection = create_db_connection(db_name)
         cursor = connection.cursor()
+
         cursor.execute(query)
         data = cursor.fetchall()
         
@@ -41,15 +36,28 @@ def get_data(query):
     return data
 
 if __name__ == '__main__':
-    query = '''SELECT name FROM people'''
-    names = get_data(query)
+    query = '''SELECT title, episode_id FROM films'''
+    retreived_data = get_data(query)
 
-    for name in names:
-        print(name[0])
+    print(type(retreived_data))
+    print(retreived_data)
+
+    for name, episode_id in retreived_data:
+        print(f'The movie {name} has the episode id {episode_id}')
     
-    # # Get all episode_id whwere the name is 'Luke Skywalker'
-    # query = '''SELECT episode_id FROM people WHERE name = 'Luke Skywalker' '''
-    # episode_ids = get_data(query)
+    # base_url = 'https://swapi.dev/api/'
+    # response = requests.get(base_url)
+    # endpoints = response.json()
+    # print(endpoints)
 
-    # for episode_id in episode_ids:
-    #     print(episode_id[0])
+    # endpoint = base_url + 'planets/schema/'
+    # response = requests.get(endpoint)
+    # schema = response.json()
+    # print(schema)
+    # for name, endpoint in content_endpoints.items():
+    #     url = endpoint + 'schema/'
+    #     print(url)
+    #     response = requests.get(url)
+    #     schema = response.json()
+    #     print(schema)
+    #     break

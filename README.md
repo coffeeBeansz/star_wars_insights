@@ -1,6 +1,8 @@
 # star_wars_insights
 Graduate project 2 - Data driven
 
+0. Install requirements.txt
+
 1. Install docker
 
 2. Run in terminal:
