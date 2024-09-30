@@ -22,14 +22,8 @@ git clone https://github.com/coffeeBeansz/star_wars_insights.git
 docker-compose up -d
 ```
 
-5. Create empty database:
-```bash
-init_db.py
-```
+5. Run the file "init_db.py" to create a database with empty tables
 
-6. Fill database with data from swapi
-```bash
-fill_db.py
-```
+6. Run the file "fill_db.py" to fill the tables of the database
 
 7. Open main.py where you can write querys and extract the data of your choosing.
