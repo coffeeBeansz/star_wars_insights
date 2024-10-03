@@ -10,3 +10,27 @@ services:
       POSTGRES_DB: star_wars_db
     ports:
       - "5432:5432"
+    volumes:
+    - ./init-scripts:/docker-entrypoint-initdb.d
+    # - ./scripts:/scripts
+    networks:
+      - swapi_network
+
+  cron:
+    build:
+      context: .
+    container_name: swapi_cron
+    healthcheck:
+      test: ["CMD-SHELL", "/usr/bin/python3 /scripts/update_database.py || exit 1"]
+      interval: 10s
+    networks:
+      - swapi_network
+    depends_on:
+      - db
+    env_file:
+      - .env
+
+
+networks:
+  swapi_network:
+    driver: bridge
