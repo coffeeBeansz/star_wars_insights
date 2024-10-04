@@ -12,7 +12,6 @@ services:
       - "5432:5432"
     volumes:
     - ./init-scripts:/docker-entrypoint-initdb.d
-    # - ./scripts:/scripts
     networks:
       - swapi_network
 
@@ -20,9 +19,9 @@ services:
     build:
       context: .
     container_name: swapi_cron
-    healthcheck:
-      test: ["CMD-SHELL", "/usr/bin/python3 /scripts/update_database.py || exit 1"]
-      interval: 10s
+    # healthcheck:
+    #   test: ["CMD-SHELL", "/usr/bin/python3 /scripts/update_database.py || exit 1"]
+    #   interval: 10s
     networks:
       - swapi_network
     depends_on:
