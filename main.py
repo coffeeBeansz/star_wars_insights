@@ -9,11 +9,15 @@ if __name__ == '__main__':
     if engine is None:
         raise Exception("Database connection could not be established")
     
-    query = 'SELECT title, episode_id FROM films'
+    # query = 'SELECT title, episode_id FROM films'
 
+    # df = pd.read_sql(query, engine)
+
+    # for _, row in df.iterrows():
+    #     print(f'The movie {row["title"]} has the episode id {row["episode_id"]}')
+
+    query = 'SELECT name FROM people'
     df = pd.read_sql(query, engine)
-
-    for _, row in df.iterrows():
-        print(f'The movie {row["title"]} has the episode id {row["episode_id"]}')
-
+    for name in df['name']:
+        print(name)
 
